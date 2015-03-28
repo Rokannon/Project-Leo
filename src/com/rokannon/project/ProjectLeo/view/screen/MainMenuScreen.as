@@ -1,5 +1,7 @@
 package com.rokannon.project.ProjectLeo.view.screen
 {
+    import com.rokannon.project.ProjectLeo.ApplicationModel;
+
     import feathers.controls.ButtonGroup;
     import feathers.controls.PanelScreen;
     import feathers.data.ListCollection;
@@ -11,6 +13,8 @@ package com.rokannon.project.ProjectLeo.view.screen
     public class MainMenuScreen extends PanelScreen
     {
         public static const EVENT_SHOW_DEPARTMENTS:String = "eventShowDepartments";
+
+        public var appModel:ApplicationModel;
 
         private var _buttonGroup:ButtonGroup;
 

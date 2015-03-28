@@ -17,11 +17,14 @@ package com.rokannon.project.ProjectLeo.view.screen
     public class DepartmentsScreen extends PanelScreen
     {
         public static const EVENT_TO_MAIN_MENU:String = "eventToMainMenu";
+        public static const EVENT_SELECT_DEPARTMENT:String = "eventSelectDepartment";
+        public static const EVENT_BROWSE_EMPLOYEES:String = "eventBrowseEmployees";
 
         public var appModel:ApplicationModel;
 
         private var _departmentsList:List;
         private var _toMainMenuButton:Button;
+        private var _browseEmployeesButton:Button;
 
         override protected function initialize():void
         {
@@ -51,6 +54,21 @@ package com.rokannon.project.ProjectLeo.view.screen
             _toMainMenuButton.label = "To Main Menu";
             _toMainMenuButton.addEventListener(Event.TRIGGERED, toMainMenuButton_triggeredHandler);
             headerProperties.leftItems = new <DisplayObject> [_toMainMenuButton];
+
+            _browseEmployeesButton = new Button();
+            _browseEmployeesButton.nameList.add(Button.ALTERNATE_NAME_FORWARD_BUTTON);
+            _browseEmployeesButton.label = "Continue";
+            _browseEmployeesButton.addEventListener(Event.TRIGGERED, browseEmplotyeesButton_triggeredHandler);
+            headerProperties.rightItems = new <DisplayObject> [
+                _browseEmployeesButton
+            ];
+
+            updateButtons();
+        }
+
+        private function browseEmplotyeesButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_BROWSE_EMPLOYEES);
         }
 
         private function toMainMenuButton_triggeredHandler(event:Event):void
@@ -60,7 +78,13 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         private function list_changeHandler(event:Event):void
         {
-            trace("List changed!");
+            updateButtons();
+            dispatchEventWith(EVENT_SELECT_DEPARTMENT, false, _departmentsList.selectedIndex);
+        }
+
+        private function updateButtons():void
+        {
+            _browseEmployeesButton.isEnabled = _departmentsList.selectedIndex >= 0;
         }
     }
 }

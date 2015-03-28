@@ -34,6 +34,8 @@ package com.rokannon.project.ProjectLeo.command.requestDB
             _data.dbSystem.requestResult.errorFlag = true;
             _data.dbSystem.requestResult.errorMessage = event.error.message;
             _data.dbSystem.requestResult.errorDetails = event.error.details;
+            trace(_data.dbSystem.requestResult.errorMessage);
+            trace(_data.dbSystem.requestResult.errorDetails);
             _eventComplete.broadcast();
         }
 
