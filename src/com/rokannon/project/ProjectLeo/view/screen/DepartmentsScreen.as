@@ -83,6 +83,12 @@ package com.rokannon.project.ProjectLeo.view.screen
             appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
         }
 
+        override public function dispose():void
+        {
+            appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
+            super.dispose();
+        }
+
         private function onRequestComplete(dbSystem:DBSystem):void
         {
             if (_isInitialized && dbSystem.requestResult.request.requestType == DBRequestType.DEPARTMENTS)
