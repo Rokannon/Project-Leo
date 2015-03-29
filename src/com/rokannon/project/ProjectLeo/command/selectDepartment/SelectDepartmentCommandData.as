@@ -1,4 +1,4 @@
-package com.rokannon.project.ProjectLeo.command
+package com.rokannon.project.ProjectLeo.command.selectDepartment
 {
     import com.rokannon.project.ProjectLeo.data.DepartmentData;
     import com.rokannon.project.ProjectLeo.system.DBSystem;

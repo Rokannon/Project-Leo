@@ -5,6 +5,6 @@ package com.rokannon.project.ProjectLeo.command.requestDB
     public class RequestDBCommandData
     {
         public var dbSystem:DBSystem;
-        public var requestText:String;
+        public var request:DBRequest;
     }
 }

@@ -20,8 +20,9 @@ package com.rokannon.project.ProjectLeo.command.requestDB
         override public function execute():void
         {
             _data.dbSystem.requestResult.clearRequest();
+            _data.dbSystem.requestResult.request = _data.request;
             _statement.sqlConnection = _data.dbSystem.connection;
-            _statement.text = _data.requestText;
+            _statement.text = _data.request.requestText;
             _statement.addEventListener(SQLEvent.RESULT, onStatementResult);
             _statement.addEventListener(SQLErrorEvent.ERROR, onStatementError);
             _statement.execute();
@@ -34,8 +35,7 @@ package com.rokannon.project.ProjectLeo.command.requestDB
             _data.dbSystem.requestResult.errorFlag = true;
             _data.dbSystem.requestResult.errorMessage = event.error.message;
             _data.dbSystem.requestResult.errorDetails = event.error.details;
-            trace(_data.dbSystem.requestResult.errorMessage);
-            trace(_data.dbSystem.requestResult.errorDetails);
+            _data.dbSystem.eventRequestComplete.broadcast();
             _eventComplete.broadcast();
         }
 
@@ -44,6 +44,7 @@ package com.rokannon.project.ProjectLeo.command.requestDB
             _statement.removeEventListener(SQLEvent.RESULT, onStatementResult);
             _statement.removeEventListener(SQLErrorEvent.ERROR, onStatementError);
             _data.dbSystem.requestResult.result = _statement.getResult();
+            _data.dbSystem.eventRequestComplete.broadcast();
             _eventComplete.broadcast();
         }
     }

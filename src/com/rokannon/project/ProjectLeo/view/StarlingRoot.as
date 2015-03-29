@@ -65,6 +65,7 @@ package com.rokannon.project.ProjectLeo.view
             events[DepartmentsScreen.EVENT_SELECT_DEPARTMENT] = onDepartmentSelect;
             events[DepartmentsScreen.EVENT_BROWSE_EMPLOYEES] = appController.goToEmployees;
             events[DepartmentsScreen.EVENT_NEW_DEPARTMENT] = SCREEN_NEW_DEPARTMENT;
+            events[DepartmentsScreen.EVENT_DELETE_DEPARTMENT] = onDepartmentDelete;
             _navigator.addScreen(SCREEN_DEPARTMENTS, new ScreenNavigatorItem(DepartmentsScreen, events, propertiesObject));
 
             events = new Object();
@@ -104,6 +105,12 @@ package com.rokannon.project.ProjectLeo.view
         private function onDepartmentCreate(event:Event):void
         {
             _appController.createDepartment(event.data as String);
+            _appController.goToDepartments();
+        }
+
+        private function onDepartmentDelete(event:Event):void
+        {
+            _appController.deleteSelectedDepartment();
             _appController.goToDepartments();
         }
     }

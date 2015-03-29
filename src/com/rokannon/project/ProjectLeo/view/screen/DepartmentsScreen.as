@@ -1,6 +1,8 @@
 package com.rokannon.project.ProjectLeo.view.screen
 {
     import com.rokannon.project.ProjectLeo.ApplicationModel;
+    import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
+    import com.rokannon.project.ProjectLeo.system.DBSystem;
 
     import feathers.controls.Button;
     import feathers.controls.Header;
@@ -20,6 +22,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         public static const EVENT_SELECT_DEPARTMENT:String = "eventSelectDepartment";
         public static const EVENT_BROWSE_EMPLOYEES:String = "eventBrowseEmployees";
         public static const EVENT_NEW_DEPARTMENT:String = "eventNewDepartment";
+        public static const EVENT_DELETE_DEPARTMENT:String = "eventDeleteDepartment";
 
         public var appModel:ApplicationModel;
 
@@ -27,6 +30,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         private var _toMainMenuButton:Button;
         private var _browseEmployeesButton:Button;
         private var _newDepartmentButton:Button;
+        private var _deleteDepartmentButton:Button;
 
         override protected function initialize():void
         {
@@ -68,7 +72,29 @@ package com.rokannon.project.ProjectLeo.view.screen
             _newDepartmentButton.addEventListener(Event.TRIGGERED, newDepartmentButton_triggeredHandler);
             footerProperties.rightItems = new <DisplayObject> [_newDepartmentButton];
 
+            _deleteDepartmentButton = new Button();
+            _deleteDepartmentButton.nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
+            _deleteDepartmentButton.label = "Delete Department";
+            _deleteDepartmentButton.addEventListener(Event.TRIGGERED, deleteDepartmentButton_triggeredHandler);
+            footerProperties.leftItems = new <DisplayObject> [_deleteDepartmentButton];
+
             updateButtons();
+
+            appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
+        }
+
+        private function onRequestComplete(dbSystem:DBSystem):void
+        {
+            if (_isInitialized && dbSystem.requestResult.request.requestType == DBRequestType.DEPARTMENTS)
+            {
+                _departmentsList.selectedIndex = -1;
+                _departmentsList.dataProvider = new ListCollection(appModel.dbSystem.requestResult.result.data);
+            }
+        }
+
+        private function deleteDepartmentButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_DELETE_DEPARTMENT);
         }
 
         private function newDepartmentButton_triggeredHandler(event:Event):void
@@ -89,12 +115,14 @@ package com.rokannon.project.ProjectLeo.view.screen
         private function list_changeHandler(event:Event):void
         {
             updateButtons();
-            dispatchEventWith(EVENT_SELECT_DEPARTMENT, false, _departmentsList.selectedIndex);
+            if (_departmentsList.selectedIndex >= 0)
+                dispatchEventWith(EVENT_SELECT_DEPARTMENT, false, _departmentsList.selectedIndex);
         }
 
         private function updateButtons():void
         {
             _browseEmployeesButton.isEnabled = _departmentsList.selectedIndex >= 0;
+            _deleteDepartmentButton.isEnabled = _departmentsList.selectedIndex >= 0;
         }
     }
 }

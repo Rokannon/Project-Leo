@@ -1,15 +1,13 @@
 package com.rokannon.project.ProjectLeo
 {
-    import com.rokannon.core.utils.string.stringFormat;
-    import com.rokannon.project.ProjectLeo.command.SelectDepartmentCommand;
-    import com.rokannon.project.ProjectLeo.command.SelectDepartmentCommandData;
-    import com.rokannon.project.ProjectLeo.command.enum.DBRequestText;
+    import com.rokannon.project.ProjectLeo.command.requestDB.DBRequest;
+    import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommand;
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommandData;
+    import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommand;
+    import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
-    import com.rokannon.project.ProjectLeo.command.traceDBResult.TraceDBResultCommand;
-    import com.rokannon.project.ProjectLeo.command.traceDBResult.TraceDBResultCommandData;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     public class ApplicationController
@@ -29,7 +27,7 @@ package com.rokannon.project.ProjectLeo
         {
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
-            requestDBCommandData.requestText = DBRequestText.DEPARTMENTS;
+            requestDBCommandData.request = new DBRequest(DBRequestType.DEPARTMENTS);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
 
             //var traceDBResultCommandData:TraceDBResultCommandData = new TraceDBResultCommandData();
@@ -63,8 +61,8 @@ package com.rokannon.project.ProjectLeo
         {
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
-            requestDBCommandData.requestText = stringFormat(DBRequestText.EMPLOYEES,
-                                                            _appModel.selectedDepartment.departmentId);
+            requestDBCommandData.request = new DBRequest(DBRequestType.EMPLOYEES,
+                                                         _appModel.selectedDepartment.departmentId);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
 
             var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
@@ -77,7 +75,24 @@ package com.rokannon.project.ProjectLeo
         {
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
-            requestDBCommandData.requestText = stringFormat(DBRequestText.ADD_DEPARTMENT, departmentName);
+            requestDBCommandData.request = new DBRequest(DBRequestType.ADD_DEPARTMENT, departmentName);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+        }
+
+        public function deleteSelectedDepartment():void
+        {
+            var requestDBCommandData:RequestDBCommandData;
+
+            requestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.REMOVE_DEPARTMENT,
+                                                         _appModel.selectedDepartment.departmentId);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+
+            requestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.REMOVE_EMPLOYEES_BY_DEPARTMENT,
+                                                         _appModel.selectedDepartment.departmentId);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
     }
