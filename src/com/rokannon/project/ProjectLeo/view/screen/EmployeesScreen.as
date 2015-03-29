@@ -20,11 +20,13 @@ package com.rokannon.project.ProjectLeo.view.screen
     public class EmployeesScreen extends PanelScreen
     {
         public static const EVENT_TO_DEPARTMENTS:String = "eventToDepartments";
+        public static const EVENT_HIRE_EMPLOYEE:String = "eventHireEmployee";
 
         public var appModel:ApplicationModel;
 
         private var _employeesList:List;
         private var _toDepartmentsButton:Button;
+        private var _hireEmployeeButton:Button;
 
         override protected function initialize():void
         {
@@ -54,6 +56,16 @@ package com.rokannon.project.ProjectLeo.view.screen
             _toDepartmentsButton.label = "To Departments";
             _toDepartmentsButton.addEventListener(Event.TRIGGERED, toDepartmentsButton_triggeredHandler);
             headerProperties.leftItems = new <DisplayObject> [_toDepartmentsButton];
+
+            _hireEmployeeButton = new Button();
+            _hireEmployeeButton.label = "Hire Employee";
+            _hireEmployeeButton.addEventListener(Event.TRIGGERED, hireEmployeeButton_triggeredHandler);
+            footerProperties.rightItems = new <DisplayObject> [_hireEmployeeButton];
+        }
+
+        private function hireEmployeeButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_HIRE_EMPLOYEE);
         }
 
         private function list_changeHandler(event:Event):void

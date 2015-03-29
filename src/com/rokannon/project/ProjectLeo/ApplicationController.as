@@ -8,6 +8,7 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
+    import com.rokannon.project.ProjectLeo.data.EmployeeData;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     public class ApplicationController
@@ -93,6 +94,16 @@ package com.rokannon.project.ProjectLeo
             requestDBCommandData.dbSystem = _appModel.dbSystem;
             requestDBCommandData.request = new DBRequest(DBRequestType.REMOVE_EMPLOYEES_BY_DEPARTMENT,
                                                          _appModel.selectedDepartment.departmentId);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+        }
+
+        public function hireEmployeeToSelectedDepartment(employeeData:EmployeeData):void
+        {
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.HIRE_EMPLOYEE, employeeData.employeeFirstName,
+                                                         employeeData.employeeLastName, employeeData.departmentId,
+                                                         employeeData.employeePosition);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
     }

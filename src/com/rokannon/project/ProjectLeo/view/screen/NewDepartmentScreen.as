@@ -56,12 +56,9 @@ package com.rokannon.project.ProjectLeo.view.screen
 
             _list = new List();
             _list.itemRendererProperties.labelField = "text";
-            _list.dataProvider = new ListCollection([
-                                                        {
-                                                            text: "Department Name",
-                                                            accessory: _nameInput
-                                                        }
-                                                    ]);
+            _list.dataProvider = new ListCollection([{
+                text: "Department Name", accessory: _nameInput
+            }]);
             _list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
             _list.isSelectable = false;
             _list.clipContent = false;

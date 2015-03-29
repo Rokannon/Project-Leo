@@ -3,8 +3,10 @@ package com.rokannon.project.ProjectLeo.view
     import com.rokannon.project.ProjectLeo.ApplicationController;
     import com.rokannon.project.ProjectLeo.ApplicationModel;
     import com.rokannon.project.ProjectLeo.command.core.CommandExecutor;
+    import com.rokannon.project.ProjectLeo.data.EmployeeData;
     import com.rokannon.project.ProjectLeo.view.screen.DepartmentsScreen;
     import com.rokannon.project.ProjectLeo.view.screen.EmployeesScreen;
+    import com.rokannon.project.ProjectLeo.view.screen.HireEmployeeScreen;
     import com.rokannon.project.ProjectLeo.view.screen.MainMenuScreen;
     import com.rokannon.project.ProjectLeo.view.screen.NewDepartmentScreen;
 
@@ -22,7 +24,8 @@ package com.rokannon.project.ProjectLeo.view
         public static const SCREEN_MAIN_MENU:String = "screenMainMenu";
         public static const SCREEN_DEPARTMENTS:String = "screenDepartments";
         public static const SCREEN_EMPLOYEES:String = "screenEmployees";
-        public static const SCREEN_NEW_DEPARTMENT:String = "newDepartment";
+        public static const SCREEN_NEW_DEPARTMENT:String = "screenNewDepartment";
+        public static const SCREEN_HIRE_EMPLOYEE:String = "screenHireEmployee";
 
         private var _navigator:ScreenNavigator;
         private var _workingLabel:Label;
@@ -56,11 +59,11 @@ package com.rokannon.project.ProjectLeo.view
                 appModel: appModel
             };
 
-            events = new Object();
+            events = {};
             events[MainMenuScreen.EVENT_SHOW_DEPARTMENTS] = appController.goToDepartments;
             _navigator.addScreen(SCREEN_MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen, events, propertiesObject));
 
-            events = new Object();
+            events = {};
             events[DepartmentsScreen.EVENT_TO_MAIN_MENU] = appController.goToMainMenu;
             events[DepartmentsScreen.EVENT_SELECT_DEPARTMENT] = onDepartmentSelect;
             events[DepartmentsScreen.EVENT_BROWSE_EMPLOYEES] = appController.goToEmployees;
@@ -68,14 +71,20 @@ package com.rokannon.project.ProjectLeo.view
             events[DepartmentsScreen.EVENT_DELETE_DEPARTMENT] = onDepartmentDelete;
             _navigator.addScreen(SCREEN_DEPARTMENTS, new ScreenNavigatorItem(DepartmentsScreen, events, propertiesObject));
 
-            events = new Object();
+            events = {};
             events[EmployeesScreen.EVENT_TO_DEPARTMENTS] = appController.goToDepartments;
+            events[EmployeesScreen.EVENT_HIRE_EMPLOYEE] = SCREEN_HIRE_EMPLOYEE;
             _navigator.addScreen(SCREEN_EMPLOYEES, new ScreenNavigatorItem(EmployeesScreen, events, propertiesObject));
 
-            events = new Object();
+            events = {};
             events[NewDepartmentScreen.EVENT_CANCEL] = appController.goToDepartments;
             events[NewDepartmentScreen.EVENT_CREATE] = onDepartmentCreate;
             _navigator.addScreen(SCREEN_NEW_DEPARTMENT, new ScreenNavigatorItem(NewDepartmentScreen, events, propertiesObject));
+
+            events = {};
+            events[HireEmployeeScreen.EVENT_CANCEL] = appController.goToEmployees;
+            events[HireEmployeeScreen.EVENT_HIRE] = onEmployeeHire;
+            _navigator.addScreen(SCREEN_HIRE_EMPLOYEE, new ScreenNavigatorItem(HireEmployeeScreen, events, propertiesObject));
 
             addChild(_navigator);
             _navigator.showScreen(SCREEN_MAIN_MENU);
@@ -112,6 +121,13 @@ package com.rokannon.project.ProjectLeo.view
         {
             _appController.deleteSelectedDepartment();
             _appController.goToDepartments();
+        }
+
+        private function onEmployeeHire(event:Event):void
+        {
+            var employeeData:EmployeeData = event.data as EmployeeData;
+            _appController.hireEmployeeToSelectedDepartment(employeeData);
+            _appController.goToEmployees();
         }
     }
 }
