@@ -7,10 +7,10 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     import flash.display.Sprite;
+    import flash.display.StageScaleMode;
 
     import starling.events.Event;
 
-    [SWF(width="800", height="600", frameRate="60")]
     public class Main extends Sprite
     {
         public const appModel:ApplicationModel = new ApplicationModel();
@@ -30,6 +30,8 @@ package com.rokannon.project.ProjectLeo
         {
             if (event != null)
                 removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+
+            stage.scaleMode = StageScaleMode.NO_SCALE;
 
             var openDBCommandData:OpenDBCommandData = new OpenDBCommandData();
             openDBCommandData.dbSystem = appModel.dbSystem;

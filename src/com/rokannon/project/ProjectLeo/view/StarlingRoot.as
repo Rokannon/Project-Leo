@@ -6,6 +6,7 @@ package com.rokannon.project.ProjectLeo.view
     import com.rokannon.project.ProjectLeo.view.screen.DepartmentsScreen;
     import com.rokannon.project.ProjectLeo.view.screen.EmployeesScreen;
     import com.rokannon.project.ProjectLeo.view.screen.MainMenuScreen;
+    import com.rokannon.project.ProjectLeo.view.screen.NewDepartmentScreen;
 
     import feathers.controls.Label;
     import feathers.controls.ScreenNavigator;
@@ -21,6 +22,7 @@ package com.rokannon.project.ProjectLeo.view
         public static const SCREEN_MAIN_MENU:String = "screenMainMenu";
         public static const SCREEN_DEPARTMENTS:String = "screenDepartments";
         public static const SCREEN_EMPLOYEES:String = "screenEmployees";
+        public static const SCREEN_NEW_DEPARTMENT:String = "newDepartment";
 
         private var _navigator:ScreenNavigator;
         private var _workingLabel:Label;
@@ -62,11 +64,17 @@ package com.rokannon.project.ProjectLeo.view
             events[DepartmentsScreen.EVENT_TO_MAIN_MENU] = appController.goToMainMenu;
             events[DepartmentsScreen.EVENT_SELECT_DEPARTMENT] = onDepartmentSelect;
             events[DepartmentsScreen.EVENT_BROWSE_EMPLOYEES] = appController.goToEmployees;
+            events[DepartmentsScreen.EVENT_NEW_DEPARTMENT] = SCREEN_NEW_DEPARTMENT;
             _navigator.addScreen(SCREEN_DEPARTMENTS, new ScreenNavigatorItem(DepartmentsScreen, events, propertiesObject));
 
             events = new Object();
             events[EmployeesScreen.EVENT_TO_DEPARTMENTS] = appController.goToDepartments;
             _navigator.addScreen(SCREEN_EMPLOYEES, new ScreenNavigatorItem(EmployeesScreen, events, propertiesObject));
+
+            events = new Object();
+            events[NewDepartmentScreen.EVENT_CANCEL] = appController.goToDepartments;
+            events[NewDepartmentScreen.EVENT_CREATE] = onDepartmentCreate;
+            _navigator.addScreen(SCREEN_NEW_DEPARTMENT, new ScreenNavigatorItem(NewDepartmentScreen, events, propertiesObject));
 
             addChild(_navigator);
             _navigator.showScreen(SCREEN_MAIN_MENU);
@@ -91,6 +99,12 @@ package com.rokannon.project.ProjectLeo.view
         private function onDepartmentSelect(event:Event):void
         {
             _appController.selectDepartment(int(event.data));
+        }
+
+        private function onDepartmentCreate(event:Event):void
+        {
+            _appController.createDepartment(event.data as String);
+            _appController.goToDepartments();
         }
     }
 }

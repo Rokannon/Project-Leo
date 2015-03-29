@@ -8,6 +8,8 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
+    import com.rokannon.project.ProjectLeo.command.traceDBResult.TraceDBResultCommand;
+    import com.rokannon.project.ProjectLeo.command.traceDBResult.TraceDBResultCommandData;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     public class ApplicationController
@@ -69,6 +71,14 @@ package com.rokannon.project.ProjectLeo
             showScreenCommandData.navigator = _appModel.screenNavigator;
             showScreenCommandData.screenName = StarlingRoot.SCREEN_EMPLOYEES;
             _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+        }
+
+        public function createDepartment(departmentName:String):void
+        {
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.requestText = stringFormat(DBRequestText.ADD_DEPARTMENT, departmentName);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
     }
 }

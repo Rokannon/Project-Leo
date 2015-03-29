@@ -19,12 +19,14 @@ package com.rokannon.project.ProjectLeo.view.screen
         public static const EVENT_TO_MAIN_MENU:String = "eventToMainMenu";
         public static const EVENT_SELECT_DEPARTMENT:String = "eventSelectDepartment";
         public static const EVENT_BROWSE_EMPLOYEES:String = "eventBrowseEmployees";
+        public static const EVENT_NEW_DEPARTMENT:String = "eventNewDepartment";
 
         public var appModel:ApplicationModel;
 
         private var _departmentsList:List;
         private var _toMainMenuButton:Button;
         private var _browseEmployeesButton:Button;
+        private var _newDepartmentButton:Button;
 
         override protected function initialize():void
         {
@@ -57,13 +59,21 @@ package com.rokannon.project.ProjectLeo.view.screen
 
             _browseEmployeesButton = new Button();
             _browseEmployeesButton.nameList.add(Button.ALTERNATE_NAME_FORWARD_BUTTON);
-            _browseEmployeesButton.label = "Continue";
+            _browseEmployeesButton.label = "Browse Employees";
             _browseEmployeesButton.addEventListener(Event.TRIGGERED, browseEmplotyeesButton_triggeredHandler);
-            headerProperties.rightItems = new <DisplayObject> [
-                _browseEmployeesButton
-            ];
+            headerProperties.rightItems = new <DisplayObject> [_browseEmployeesButton];
+
+            _newDepartmentButton = new Button();
+            _newDepartmentButton.label = "New Department";
+            _newDepartmentButton.addEventListener(Event.TRIGGERED, newDepartmentButton_triggeredHandler);
+            footerProperties.rightItems = new <DisplayObject> [_newDepartmentButton];
 
             updateButtons();
+        }
+
+        private function newDepartmentButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_NEW_DEPARTMENT);
         }
 
         private function browseEmplotyeesButton_triggeredHandler(event:Event):void

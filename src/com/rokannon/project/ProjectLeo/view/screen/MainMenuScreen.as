@@ -18,13 +18,6 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         private var _buttonGroup:ButtonGroup;
 
-        override public function dispose():void
-        {
-            if (_isInitialized)
-
-                super.dispose();
-        }
-
         override protected function initialize():void
         {
             super.initialize();

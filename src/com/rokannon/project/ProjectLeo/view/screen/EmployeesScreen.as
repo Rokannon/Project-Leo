@@ -52,7 +52,7 @@ package com.rokannon.project.ProjectLeo.view.screen
             _toDepartmentsButton = new Button();
             _toDepartmentsButton.nameList.add(Button.ALTERNATE_NAME_BACK_BUTTON);
             _toDepartmentsButton.label = "To Departments";
-            _toDepartmentsButton.addEventListener(Event.TRIGGERED, toMainMenuButton_triggeredHandler);
+            _toDepartmentsButton.addEventListener(Event.TRIGGERED, toDepartmentsButton_triggeredHandler);
             headerProperties.leftItems = new <DisplayObject> [_toDepartmentsButton];
         }
 
@@ -61,7 +61,7 @@ package com.rokannon.project.ProjectLeo.view.screen
             trace("List changed!");
         }
 
-        private function toMainMenuButton_triggeredHandler(event:Event):void
+        private function toDepartmentsButton_triggeredHandler(event:Event):void
         {
             dispatchEventWith(EVENT_TO_DEPARTMENTS);
         }
