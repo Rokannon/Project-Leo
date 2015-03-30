@@ -85,7 +85,7 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         override public function dispose():void
         {
-            appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
+            appModel.dbSystem.eventRequestComplete.remove(onRequestComplete);
             super.dispose();
         }
 
