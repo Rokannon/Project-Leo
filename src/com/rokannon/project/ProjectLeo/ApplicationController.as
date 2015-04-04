@@ -6,6 +6,8 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommandData;
     import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommand;
     import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommandData;
+    import com.rokannon.project.ProjectLeo.command.selectEmployee.SelectEmployeeCommand;
+    import com.rokannon.project.ProjectLeo.command.selectEmployee.SelectEmployeeCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
@@ -58,7 +60,7 @@ package com.rokannon.project.ProjectLeo
             _appModel.commandExecutor.pushCommand(new SelectDepartmentCommand(selectDepartmentCommandData));
         }
 
-        public function goToEmployees():void
+        public function goToEmployeesOfSelectedDepartment():void
         {
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
@@ -97,13 +99,31 @@ package com.rokannon.project.ProjectLeo
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
 
-        public function hireEmployeeToSelectedDepartment(employeeData:EmployeeData):void
+        public function hireEmployee(employeeData:EmployeeData):void
         {
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
             requestDBCommandData.request = new DBRequest(DBRequestType.HIRE_EMPLOYEE, employeeData.employeeFirstName,
                                                          employeeData.employeeLastName, employeeData.departmentId,
                                                          employeeData.employeePosition);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+        }
+
+        public function selectEmployee(employeeIndex:int):void
+        {
+            var selectEmployeeCommandData:SelectEmployeeCommandData = new SelectEmployeeCommandData();
+            selectEmployeeCommandData.employeeIndex = employeeIndex;
+            selectEmployeeCommandData.dbSystem = _appModel.dbSystem;
+            selectEmployeeCommandData.employeeData = _appModel.selectedEmployee;
+            _appModel.commandExecutor.pushCommand(new SelectEmployeeCommand(selectEmployeeCommandData));
+        }
+
+        public function fireSelectedEmployee():void
+        {
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.FIRE_EMPLOYEE,
+                                                         _appModel.selectedEmployee.employeeId);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
     }

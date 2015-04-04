@@ -2,6 +2,8 @@ package com.rokannon.project.ProjectLeo.view.screen
 {
     import com.rokannon.core.utils.string.stringFormat;
     import com.rokannon.project.ProjectLeo.ApplicationModel;
+    import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
+    import com.rokannon.project.ProjectLeo.system.DBSystem;
 
     import feathers.controls.Button;
     import feathers.controls.Header;
@@ -21,12 +23,15 @@ package com.rokannon.project.ProjectLeo.view.screen
     {
         public static const EVENT_TO_DEPARTMENTS:String = "eventToDepartments";
         public static const EVENT_HIRE_EMPLOYEE:String = "eventHireEmployee";
+        public static const EVENT_FIRE_EMPLOYEE:String = "eventFireEmployee";
+        public static const EVENT_SELECT_EMPLOYEE:String = "eventSelectEmployee";
 
         public var appModel:ApplicationModel;
 
         private var _employeesList:List;
         private var _toDepartmentsButton:Button;
         private var _hireEmployeeButton:Button;
+        private var _fireEmployeeButton:Button;
 
         override protected function initialize():void
         {
@@ -61,6 +66,36 @@ package com.rokannon.project.ProjectLeo.view.screen
             _hireEmployeeButton.label = "Hire Employee";
             _hireEmployeeButton.addEventListener(Event.TRIGGERED, hireEmployeeButton_triggeredHandler);
             footerProperties.rightItems = new <DisplayObject> [_hireEmployeeButton];
+
+            _fireEmployeeButton = new Button();
+            _fireEmployeeButton .nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
+            _fireEmployeeButton.label = "Fire Employee";
+            _fireEmployeeButton.addEventListener(Event.TRIGGERED, fireEmployeeButton_triggeredHandler);
+            footerProperties.leftItems = new <DisplayObject> [_fireEmployeeButton];
+
+            updateButtons();
+
+            appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
+        }
+
+        override public function dispose():void
+        {
+            appModel.dbSystem.eventRequestComplete.remove(onRequestComplete);
+            super.dispose();
+        }
+
+        private function onRequestComplete(dbSystem:DBSystem):void
+        {
+            if (_isInitialized && dbSystem.requestResult.request.requestType == DBRequestType.EMPLOYEES)
+            {
+                _employeesList.selectedIndex = -1;
+                _employeesList.dataProvider = new ListCollection(dbSystem.requestResult.result.data);
+            }
+        }
+
+        private function fireEmployeeButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_FIRE_EMPLOYEE);
         }
 
         private function hireEmployeeButton_triggeredHandler(event:Event):void
@@ -70,12 +105,19 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         private function list_changeHandler(event:Event):void
         {
-            trace("List changed!");
+            updateButtons();
+            if (_employeesList.selectedIndex >= 0)
+                dispatchEventWith(EVENT_SELECT_EMPLOYEE, false, _employeesList.selectedIndex);
         }
 
         private function toDepartmentsButton_triggeredHandler(event:Event):void
         {
             dispatchEventWith(EVENT_TO_DEPARTMENTS);
+        }
+
+        private function updateButtons():void
+        {
+            _fireEmployeeButton.isEnabled = _employeesList.selectedIndex >= 0;
         }
     }
 }

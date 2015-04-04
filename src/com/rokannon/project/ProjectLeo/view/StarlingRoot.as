@@ -66,7 +66,7 @@ package com.rokannon.project.ProjectLeo.view
             events = {};
             events[DepartmentsScreen.EVENT_TO_MAIN_MENU] = appController.goToMainMenu;
             events[DepartmentsScreen.EVENT_SELECT_DEPARTMENT] = onDepartmentSelect;
-            events[DepartmentsScreen.EVENT_BROWSE_EMPLOYEES] = appController.goToEmployees;
+            events[DepartmentsScreen.EVENT_BROWSE_EMPLOYEES] = appController.goToEmployeesOfSelectedDepartment;
             events[DepartmentsScreen.EVENT_NEW_DEPARTMENT] = SCREEN_NEW_DEPARTMENT;
             events[DepartmentsScreen.EVENT_DELETE_DEPARTMENT] = onDepartmentDelete;
             _navigator.addScreen(SCREEN_DEPARTMENTS, new ScreenNavigatorItem(DepartmentsScreen, events, propertiesObject));
@@ -74,6 +74,8 @@ package com.rokannon.project.ProjectLeo.view
             events = {};
             events[EmployeesScreen.EVENT_TO_DEPARTMENTS] = appController.goToDepartments;
             events[EmployeesScreen.EVENT_HIRE_EMPLOYEE] = SCREEN_HIRE_EMPLOYEE;
+            events[EmployeesScreen.EVENT_FIRE_EMPLOYEE] = onEmployeeFire;
+            events[EmployeesScreen.EVENT_SELECT_EMPLOYEE] = onEmployeeSelect;
             _navigator.addScreen(SCREEN_EMPLOYEES, new ScreenNavigatorItem(EmployeesScreen, events, propertiesObject));
 
             events = {};
@@ -82,7 +84,7 @@ package com.rokannon.project.ProjectLeo.view
             _navigator.addScreen(SCREEN_NEW_DEPARTMENT, new ScreenNavigatorItem(NewDepartmentScreen, events, propertiesObject));
 
             events = {};
-            events[HireEmployeeScreen.EVENT_CANCEL] = appController.goToEmployees;
+            events[HireEmployeeScreen.EVENT_CANCEL] = appController.goToEmployeesOfSelectedDepartment;
             events[HireEmployeeScreen.EVENT_HIRE] = onEmployeeHire;
             _navigator.addScreen(SCREEN_HIRE_EMPLOYEE, new ScreenNavigatorItem(HireEmployeeScreen, events, propertiesObject));
 
@@ -126,8 +128,19 @@ package com.rokannon.project.ProjectLeo.view
         private function onEmployeeHire(event:Event):void
         {
             var employeeData:EmployeeData = event.data as EmployeeData;
-            _appController.hireEmployeeToSelectedDepartment(employeeData);
-            _appController.goToEmployees();
+            _appController.hireEmployee(employeeData);
+            _appController.goToEmployeesOfSelectedDepartment();
+        }
+
+        private function onEmployeeFire(event:Event):void
+        {
+            _appController.fireSelectedEmployee();
+            _appController.goToEmployeesOfSelectedDepartment();
+        }
+
+        private function onEmployeeSelect(event:Event):void
+        {
+            _appController.selectEmployee(int(event.data));
         }
     }
 }

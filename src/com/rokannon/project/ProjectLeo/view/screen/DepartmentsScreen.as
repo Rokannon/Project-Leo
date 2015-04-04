@@ -94,7 +94,7 @@ package com.rokannon.project.ProjectLeo.view.screen
             if (_isInitialized && dbSystem.requestResult.request.requestType == DBRequestType.DEPARTMENTS)
             {
                 _departmentsList.selectedIndex = -1;
-                _departmentsList.dataProvider = new ListCollection(appModel.dbSystem.requestResult.result.data);
+                _departmentsList.dataProvider = new ListCollection(dbSystem.requestResult.result.data);
             }
         }
 

@@ -11,7 +11,7 @@ package com.rokannon.project.ProjectLeo.command.core
         {
         }
 
-        public function get eventComplete():Broadcaster
+        public final function get eventComplete():Broadcaster
         {
             return _eventComplete;
         }

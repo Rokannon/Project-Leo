@@ -8,6 +8,7 @@ package com.rokannon.project.ProjectLeo.command.requestDB
         public static const REMOVE_DEPARTMENT:DBRequestType = new DBRequestType("DELETE FROM Departments WHERE DeptID = '{0}';");
         public static const REMOVE_EMPLOYEES_BY_DEPARTMENT:DBRequestType = new DBRequestType("DELETE FROM Departments WHERE DeptID = '{0}';");
         public static const HIRE_EMPLOYEE:DBRequestType = new DBRequestType("INSERT INTO Employees (FirstName, LastName, DeptID, Position) VALUES ('{0}', '{1}', '{2}', '{3}');");
+        public static const FIRE_EMPLOYEE:DBRequestType = new DBRequestType("DELETE FROM Employees WHERE EmplID = '{0}';");
 
         private var _requestTemplate:String;
 
