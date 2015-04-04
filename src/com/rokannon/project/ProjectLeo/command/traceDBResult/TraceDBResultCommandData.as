@@ -1,6 +1,6 @@
 package com.rokannon.project.ProjectLeo.command.traceDBResult
 {
-    import com.rokannon.project.ProjectLeo.system.DBSystem;
+    import com.rokannon.project.ProjectLeo.system.database.DBSystem;
 
     public class TraceDBResultCommandData
     {

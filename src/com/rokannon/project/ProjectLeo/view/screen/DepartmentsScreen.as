@@ -2,7 +2,7 @@ package com.rokannon.project.ProjectLeo.view.screen
 {
     import com.rokannon.project.ProjectLeo.ApplicationModel;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
-    import com.rokannon.project.ProjectLeo.system.DBSystem;
+    import com.rokannon.project.ProjectLeo.system.database.DBSystem;
 
     import feathers.controls.Button;
     import feathers.controls.Header;

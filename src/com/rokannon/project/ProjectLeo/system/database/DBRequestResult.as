@@ -1,4 +1,4 @@
-package com.rokannon.project.ProjectLeo.system
+package com.rokannon.project.ProjectLeo.system.database
 {
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequest;
 

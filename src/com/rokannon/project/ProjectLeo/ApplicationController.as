@@ -126,5 +126,10 @@ package com.rokannon.project.ProjectLeo
                                                          _appModel.selectedEmployee.employeeId);
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
+
+        public function goToSearchEmployees():void
+        {
+
+        }
     }
 }

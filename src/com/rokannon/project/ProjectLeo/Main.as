@@ -1,5 +1,7 @@
 package com.rokannon.project.ProjectLeo
 {
+    import com.rokannon.project.ProjectLeo.command.initDataSystemCommand.InitDataSystemCommand;
+    import com.rokannon.project.ProjectLeo.command.initDataSystemCommand.InitDataSystemCommandData;
     import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommand;
     import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommandData;
     import com.rokannon.project.ProjectLeo.command.startStarling.StartStarlingCommand;
@@ -44,6 +46,10 @@ package com.rokannon.project.ProjectLeo
             startStarlingCommandData.nativeStage = stage;
             startStarlingCommandData.rootClass = StarlingRoot;
             appModel.commandExecutor.pushCommand(new StartStarlingCommand(startStarlingCommandData));
+
+            var initDataSystemCommandData:InitDataSystemCommandData = new InitDataSystemCommandData();
+            initDataSystemCommandData.appDataSystem = appModel.appDataSystem;
+            appModel.commandExecutor.pushCommand(new InitDataSystemCommand(initDataSystemCommandData));
         }
     }
 }
