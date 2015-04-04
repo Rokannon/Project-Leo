@@ -1,0 +1,6 @@
+[submodule "submodules/Feathers"]
+	path = submodules/Feathers
+	url = https://github.com/joshtynjala/feathers.git
+[submodule "submodules/Starling-Framework"]
+	path = submodules/Starling-Framework
+	url = https://github.com/Gamua/Starling-Framework.git
