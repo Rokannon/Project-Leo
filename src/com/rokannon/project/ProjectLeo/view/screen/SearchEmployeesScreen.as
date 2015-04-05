@@ -2,6 +2,7 @@ package com.rokannon.project.ProjectLeo.view.screen
 {
     import com.rokannon.core.utils.string.stringFormat;
     import com.rokannon.project.ProjectLeo.ApplicationModel;
+    import com.rokannon.project.ProjectLeo.data.DepartmentData;
     import com.rokannon.project.ProjectLeo.system.dataLibrary.tableField.TableFieldData;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.EmployeeFilterItem;
 
@@ -9,6 +10,7 @@ package com.rokannon.project.ProjectLeo.view.screen
     import feathers.controls.Header;
     import feathers.controls.List;
     import feathers.controls.PanelScreen;
+    import feathers.controls.PickerList;
     import feathers.controls.TextInput;
     import feathers.core.IFeathersControl;
     import feathers.data.ListCollection;
@@ -19,6 +21,7 @@ package com.rokannon.project.ProjectLeo.view.screen
 
     import starling.display.DisplayObject;
     import starling.events.Event;
+    import starling.events.EventDispatcher;
 
     public class SearchEmployeesScreen extends PanelScreen
     {
@@ -29,7 +32,7 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         public var appModel:ApplicationModel;
 
-        private const _filterItemByTextInput:Dictionary = new Dictionary();
+        private const _filterItemByAccessory:Dictionary = new Dictionary();
         private var _filterListCollection:ListCollection;
         private var _toMainMenuButton:Button;
         private var _removeFilterButton:Button;
@@ -108,31 +111,34 @@ package com.rokannon.project.ProjectLeo.view.screen
             filterItem.fieldData = helperFields[0];
             helperFields.length = 0;
             filterItem.filterValue = "";
-            var textInput:TextInput = new TextInput();
-            textInput.text = filterItem.filterValue;
-            textInput.addEventListener(Event.CHANGE, filterItemTextInput_changeHandler);
-            _filterItemByTextInput[textInput] = filterItem;
-            _filtersList.dataProvider.push({
-                                               text: filterItem.fieldData.labelName, accessory: textInput
-                                           });
+            addFilterItemToListCollection(filterItem);
             appModel.employeeFilterSystem.addFilterItem(filterItem);
             updateButtons();
         }
 
-        private function filterItemTextInput_changeHandler(event:Event):void
+        private function filterItemAccessory_changeHandler(event:Event):void
         {
-            var textInput:TextInput = event.target as TextInput;
-            var filterItem:EmployeeFilterItem = _filterItemByTextInput[textInput];
-            filterItem.filterValue = textInput.text;
+            var filterItem:EmployeeFilterItem = _filterItemByAccessory[event.target];
+            if (filterItem.fieldData == appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field"))
+            {
+                var pickerList:PickerList = event.target as PickerList;
+                var departmentData:DepartmentData = pickerList.dataProvider.getItemAt(pickerList.selectedIndex) as DepartmentData;
+                filterItem.filterValue = departmentData.departmentId;
+            }
+            else
+            {
+                var textInput:TextInput = event.target as TextInput;
+                filterItem.filterValue = textInput.text;
+            }
         }
 
         private function removeFilterButton_triggeredHandler(event:Event):void
         {
             var index:int = _filtersList.selectedIndex;
             var object:Object = _filterListCollection.removeItemAt(index);
-            var textInput:TextInput = object.accessory;
-            textInput.removeEventListener(Event.CHANGE, filterItemTextInput_changeHandler);
-            delete _filterItemByTextInput[textInput];
+            var accessory:EventDispatcher = object.accessory;
+            accessory.removeEventListener(Event.CHANGE, filterItemAccessory_changeHandler);
+            delete _filterItemByAccessory[accessory];
             var filterItem:EmployeeFilterItem = appModel.employeeFilterSystem.filterItems[index];
             appModel.employeeFilterSystem.removeFilterItem(filterItem);
             _filtersList.selectedIndex = _filterListCollection.length - 1;
@@ -155,13 +161,38 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         private function addFilterItemToListCollection(filterItem:EmployeeFilterItem):void
         {
-            var textInput:TextInput = new TextInput();
-            textInput.text = "a-zA-Z0-9_ а-яА-Я";
-            textInput.text = filterItem.filterValue;
-            _filterListCollection.push({
-                                           text: filterItem.fieldData.labelName, accessory: textInput
-                                       })
+            var dataItem:Object = {text: filterItem.fieldData.labelName};
+            if (filterItem.fieldData == appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field"))
+            {
+                var pickerList:PickerList = new PickerList();
+                _filterItemByAccessory[pickerList] = filterItem;
+                pickerList.labelField = "departmentName";
+                pickerList.dataProvider = new ListCollection(appModel.departmentsSystem.departments);
+                pickerList.selectedIndex = -1;
+                pickerList.addEventListener(Event.CHANGE, filterItemAccessory_changeHandler);
+                var departmentData:DepartmentData = appModel.departmentsSystem.departmentByDepartmentId[filterItem.filterValue];
+                if (departmentData != null)
+                    pickerList.selectedItem = departmentData;
+                else
+                    pickerList.selectedIndex = 0;
+                pickerList.listFactory = function ():List
+                {
+                    var list:List = new List();
+                    list.itemRendererProperties.labelField = "departmentName";
+                    return list;
+                };
+                dataItem.accessory = pickerList;
+            }
+            else
+            {
+                var textInput:TextInput = new TextInput();
+                textInput.restrict = "a-zA-Z0-9_ а-яА-Я";
+                textInput.text = filterItem.filterValue;
+                textInput.addEventListener(Event.CHANGE, filterItemAccessory_changeHandler);
+                _filterItemByAccessory[textInput] = filterItem;
+                dataItem.accessory = textInput;
+            }
+            _filterListCollection.push(dataItem);
         }
-
     }
 }

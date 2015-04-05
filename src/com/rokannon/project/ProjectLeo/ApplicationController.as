@@ -11,6 +11,8 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.selectEmployee.SelectEmployeeCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
+    import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommand;
+    import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommandData;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.EmployeeFilterItem;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.enum.FilterContext;
@@ -154,10 +156,25 @@ package com.rokannon.project.ProjectLeo
         {
             _appModel.employeeFilterSystem.removeAllFilterItems();
 
+            updateDepartments();
+
             var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
             showScreenCommandData.navigator = _appModel.screenNavigator;
             showScreenCommandData.screenName = StarlingRoot.SCREEN_SEARCH_EMPLOYEES;
             _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+        }
+
+        public function updateDepartments():void
+        {
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.GET_DEPARTMENTS);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+
+            var updateDepartmentsCommandData:UpdateDepartmentsCommandData = new UpdateDepartmentsCommandData();
+            updateDepartmentsCommandData.dbSystem = _appModel.dbSystem;
+            updateDepartmentsCommandData.departmentsSystem = _appModel.departmentsSystem;
+            _appModel.commandExecutor.pushCommand(new UpdateDepartmentsCommand(updateDepartmentsCommandData));
         }
     }
 }

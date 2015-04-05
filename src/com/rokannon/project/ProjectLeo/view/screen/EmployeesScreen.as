@@ -26,6 +26,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         public static const EVENT_SELECT_EMPLOYEE:String = "eventSelectEmployee";
         public static const EVENT_TO_FILTER:String = "eventToFilter";
         public static const EVENT_TO_MAIN_MENU:String = "eventToMainMenu";
+        public static const EVENT_BATCH_UPDATE:String = "eventBatchUpdate";
 
         public var appModel:ApplicationModel;
 
@@ -33,6 +34,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         private var _backButton:Button;
         private var _hireEmployeeButton:Button;
         private var _fireEmployeeButton:Button;
+        private var _batchUpdateButton:Button;
 
         override protected function initialize():void
         {
@@ -79,6 +81,13 @@ package com.rokannon.project.ProjectLeo.view.screen
                 _hireEmployeeButton.addEventListener(Event.TRIGGERED, hireEmployeeButton_triggeredHandler);
                 footerProperties.rightItems = new <DisplayObject> [_hireEmployeeButton];
             }
+            else if (appModel.employeeFilterSystem.filterContext == FilterContext.CUSTOM_FILTER)
+            {
+                _batchUpdateButton = new Button();
+                _batchUpdateButton.label = "Batch Update";
+                _batchUpdateButton.addEventListener(Event.TRIGGERED, batchUpdateButton_triggeredHandler);
+                footerProperties.rightItems = new <DisplayObject> [_batchUpdateButton];
+            }
 
             _fireEmployeeButton = new Button();
             _fireEmployeeButton.nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
@@ -89,6 +98,11 @@ package com.rokannon.project.ProjectLeo.view.screen
             updateButtons();
 
             appModel.dbSystem.eventRequestComplete.add(onRequestComplete);
+        }
+
+        private function batchUpdateButton_triggeredHandler(event:Event):void
+        {
+            dispatchEventWith(EVENT_BATCH_UPDATE);
         }
 
         override public function dispose():void
