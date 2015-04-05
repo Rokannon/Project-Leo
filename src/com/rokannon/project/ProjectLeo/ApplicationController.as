@@ -1,5 +1,6 @@
 package com.rokannon.project.ProjectLeo
 {
+    import com.rokannon.core.utils.string.stringFormat;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequest;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommand;
@@ -11,10 +12,14 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
+    import com.rokannon.project.ProjectLeo.system.employeeFilter.EmployeeFilterItem;
+    import com.rokannon.project.ProjectLeo.system.employeeFilter.enum.FilterContext;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     public class ApplicationController
     {
+        private static const helperStrings:Vector.<String> = new <String>[];
+
         private var _appModel:ApplicationModel;
 
         public function ApplicationController()
@@ -43,14 +48,6 @@ package com.rokannon.project.ProjectLeo
             _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
         }
 
-        public function goToMainMenu():void
-        {
-            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
-            showScreenCommandData.navigator = _appModel.screenNavigator;
-            showScreenCommandData.screenName = StarlingRoot.SCREEN_MAIN_MENU;
-            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
-        }
-
         public function selectDepartment(departmentIndex:int):void
         {
             var selectDepartmentCommandData:SelectDepartmentCommandData = new SelectDepartmentCommandData();
@@ -62,16 +59,12 @@ package com.rokannon.project.ProjectLeo
 
         public function goToEmployeesOfSelectedDepartment():void
         {
-            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
-            requestDBCommandData.dbSystem = _appModel.dbSystem;
-            requestDBCommandData.request = new DBRequest(DBRequestType.EMPLOYEES,
-                                                         _appModel.selectedDepartment.departmentId);
-            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
-
-            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
-            showScreenCommandData.navigator = _appModel.screenNavigator;
-            showScreenCommandData.screenName = StarlingRoot.SCREEN_EMPLOYEES;
-            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+            var filterItem:EmployeeFilterItem = new EmployeeFilterItem();
+            filterItem.fieldData = _appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field");
+            filterItem.filterValue = _appModel.selectedDepartment.departmentId;
+            _appModel.employeeFilterSystem.removeAllFilterItems();
+            _appModel.employeeFilterSystem.addFilterItem(filterItem);
+            goToEmployees(FilterContext.DEPARTMENT);
         }
 
         public function createDepartment(departmentName:String):void
@@ -127,9 +120,44 @@ package com.rokannon.project.ProjectLeo
             _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
 
-        public function goToSearchEmployees():void
+        public function goToEmployeesFiltered():void
         {
+            goToEmployees(FilterContext.CUSTOM_FILTER);
+        }
 
+        public function goToEmployees(filterContext:String = null):void
+        {
+            if (filterContext != null)
+                _appModel.employeeFilterSystem.filterContext = filterContext;
+            var filterItems:Vector.<EmployeeFilterItem> = _appModel.employeeFilterSystem.filterItems;
+            for (var i:int = 0; i < filterItems.length; ++i)
+            {
+                var filterItem:EmployeeFilterItem = filterItems[i];
+                var conditionTemplate = filterItem.fieldData.dataType == "integer" ? "{0}={1}" : "{0}='{1}'";
+                helperStrings.push(stringFormat(conditionTemplate, filterItem.fieldData.fieldName,
+                                                filterItem.filterValue));
+            }
+            var whereClause:String = helperStrings.join(" AND ");
+            helperStrings.length = 0;
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.EMPLOYEES, whereClause);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+
+            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
+            showScreenCommandData.navigator = _appModel.screenNavigator;
+            showScreenCommandData.screenName = StarlingRoot.SCREEN_EMPLOYEES;
+            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+        }
+
+        public function startNewSearch():void
+        {
+            _appModel.employeeFilterSystem.removeAllFilterItems();
+
+            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
+            showScreenCommandData.navigator = _appModel.screenNavigator;
+            showScreenCommandData.screenName = StarlingRoot.SCREEN_SEARCH_EMPLOYEES;
+            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
         }
     }
 }

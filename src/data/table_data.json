@@ -1,38 +1,33 @@
 {
-    "employees_table": {
-        "primaryKeyName": "EmplID",
-        "tableFields": [
-            {
-                "allowSearch": false,
-                "enableAutoincrement": true,
-                "dataType": "integer",
-                "fieldName": "EmplID",
-                "labelName": "Employee ID"
-            },
-            {
-                "allowSearch": false,
-                "dataType": "integer",
-                "fieldName": "DeptID",
-                "labelName": "Department ID"
-            },
-            {
-                "allowSearch": true,
-                "dataType": "text",
-                "fieldName": "FirstName",
-                "labelName": "First Name"
-            },
-            {
-                "allowSearch": true,
-                "dataType": "text",
-                "fieldName": "LastName",
-                "labelName": "Last Name"
-            },
-            {
-                "allowSearch": true,
-                "dataType": "text",
-                "fieldName": "Position",
-                "labelName": "Position"
-            }
-        ]
-    }
+  "employees_table": {
+    "primaryKeyName": "EmplID",
+    "tableFields": [
+      {
+        "allowSearch": false,
+        "dataType": "integer",
+        "enableAutoincrement": true,
+        "fieldName": "EmplID",
+        "labelName": "Employee ID"
+      },
+      "dept_field",
+      {
+        "allowSearch": true,
+        "dataType": "text",
+        "fieldName": "FirstName",
+        "labelName": "First Name"
+      },
+      {
+        "allowSearch": true,
+        "dataType": "text",
+        "fieldName": "LastName",
+        "labelName": "Last Name"
+      },
+      {
+        "allowSearch": true,
+        "dataType": "text",
+        "fieldName": "Position",
+        "labelName": "Position"
+      }
+    ]
+  }
 }

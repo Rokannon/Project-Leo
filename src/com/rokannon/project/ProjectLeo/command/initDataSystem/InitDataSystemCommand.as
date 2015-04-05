@@ -1,4 +1,4 @@
-package com.rokannon.project.ProjectLeo.command.initDataSystemCommand
+package com.rokannon.project.ProjectLeo.command.initDataSystem
 {
     import com.rokannon.core.utils.string.trimExtension;
     import com.rokannon.project.ProjectLeo.command.core.AsyncCommand;

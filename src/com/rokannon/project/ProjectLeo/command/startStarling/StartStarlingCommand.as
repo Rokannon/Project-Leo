@@ -1,7 +1,7 @@
 package com.rokannon.project.ProjectLeo.command.startStarling
 {
-    import com.rokannon.project.ProjectLeo.view.StarlingRoot;
     import com.rokannon.project.ProjectLeo.command.core.AsyncCommand;
+    import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     import starling.core.Starling;
     import starling.events.Event;

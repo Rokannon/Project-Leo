@@ -35,8 +35,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         {
             super.initialize();
 
-            headerProperties.title = stringFormat("Hire employee to '{0}'",
-                                                  appModel.selectedDepartment.departmentName);
+            headerProperties.title = stringFormat("Hire employee to '{0}'", appModel.selectedDepartment.departmentName);
             layout = new AnchorLayout();
             footerFactory = function ():IFeathersControl
             {
@@ -71,7 +70,7 @@ package com.rokannon.project.ProjectLeo.view.screen
             _list.itemRendererProperties.labelField = "text";
             _list.dataProvider = new ListCollection([{
                 text: "Employee First Name", accessory: _firstNameInput
-            },{
+            }, {
                 text: "Employee Last Name", accessory: _lastNameInput
             }, {
                 text: "Employee Position", accessory: _positionInput

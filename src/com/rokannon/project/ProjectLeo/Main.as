@@ -1,7 +1,7 @@
 package com.rokannon.project.ProjectLeo
 {
-    import com.rokannon.project.ProjectLeo.command.initDataSystemCommand.InitDataSystemCommand;
-    import com.rokannon.project.ProjectLeo.command.initDataSystemCommand.InitDataSystemCommandData;
+    import com.rokannon.project.ProjectLeo.command.initDataSystem.InitDataSystemCommand;
+    import com.rokannon.project.ProjectLeo.command.initDataSystem.InitDataSystemCommandData;
     import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommand;
     import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommandData;
     import com.rokannon.project.ProjectLeo.command.startStarling.StartStarlingCommand;

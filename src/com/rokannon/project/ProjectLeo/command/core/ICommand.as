@@ -5,6 +5,7 @@ package com.rokannon.project.ProjectLeo.command.core
     public interface ICommand
     {
         function get eventComplete():Broadcaster;
+
         function execute():void;
     }
 }

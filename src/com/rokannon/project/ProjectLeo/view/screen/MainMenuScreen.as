@@ -13,6 +13,7 @@ package com.rokannon.project.ProjectLeo.view.screen
     public class MainMenuScreen extends PanelScreen
     {
         public static const EVENT_SHOW_DEPARTMENTS:String = "eventShowDepartments";
+        public static const EVENT_SEARCH_EMPLOYEES:String = "eventSearchEmployees";
 
         public var appModel:ApplicationModel;
 
@@ -28,6 +29,8 @@ package com.rokannon.project.ProjectLeo.view.screen
             _buttonGroup = new ButtonGroup();
             _buttonGroup.dataProvider = new ListCollection([{
                 label: "Show Departments", event: EVENT_SHOW_DEPARTMENTS
+            }, {
+                label: "Search Employees", event: EVENT_SEARCH_EMPLOYEES
             }]);
             _buttonGroup.addEventListener(Event.TRIGGERED, buttonGroup_triggeredHandler);
             var buttonGroupLayoutData:AnchorLayoutData = new AnchorLayoutData();

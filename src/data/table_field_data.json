@@ -1,0 +1,8 @@
+{
+  "dept_field": {
+    "allowSearch": false,
+    "dataType": "integer",
+    "fieldName": "DeptID",
+    "labelName": "Department ID"
+  }
+}

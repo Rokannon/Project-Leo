@@ -7,6 +7,8 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.tableField
 
     public class TableFieldDataLibrary extends ApplicationDataLibrary
     {
+        public const tableFieldDataArray:Vector.<TableFieldData> = new <TableFieldData>[];
+
         public function TableFieldDataLibrary()
         {
             super(DataType.TABLE_FIELD_DATA);
@@ -25,6 +27,7 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.tableField
             data.enableAutoincrement = getProperty(json, "enableAutoincrement", false);
             data.fieldName = requireProperty(json, "fieldName");
             data.labelName = requireProperty(json, "labelName");
+            tableFieldDataArray.push(data);
             return data;
         }
     }

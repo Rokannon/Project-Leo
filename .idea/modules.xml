@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/submodules//Feathers.iml" filepath="$PROJECT_DIR$/submodules//Feathers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/submodules/Feathers.iml" filepath="$PROJECT_DIR$/submodules/Feathers.iml" />
       <module fileurl="file://$PROJECT_DIR$/Project-Leo.iml" filepath="$PROJECT_DIR$/Project-Leo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/submodules//Starling-Framework.iml" filepath="$PROJECT_DIR$/submodules//Starling-Framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/submodules/Starling-Framework.iml" filepath="$PROJECT_DIR$/submodules/Starling-Framework.iml" />
     </modules>
   </component>
 </project>
