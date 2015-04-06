@@ -1,6 +1,5 @@
 package com.rokannon.project.ProjectLeo
 {
-    import com.rokannon.core.utils.string.stringFormat;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequest;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommand;
@@ -14,14 +13,12 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommand;
     import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommandData;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
-    import com.rokannon.project.ProjectLeo.system.employeeFilter.EmployeeFilterItem;
+    import com.rokannon.project.ProjectLeo.data.tableFieldItem.TableFieldItem;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.enum.FilterContext;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
     public class ApplicationController
     {
-        private static const helperStrings:Vector.<String> = new <String>[];
-
         private var _appModel:ApplicationModel;
 
         public function ApplicationController()
@@ -61,11 +58,11 @@ package com.rokannon.project.ProjectLeo
 
         public function goToEmployeesOfSelectedDepartment():void
         {
-            var filterItem:EmployeeFilterItem = new EmployeeFilterItem();
-            filterItem.fieldData = _appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field");
-            filterItem.filterValue = _appModel.selectedDepartment.departmentId;
-            _appModel.employeeFilterSystem.removeAllFilterItems();
-            _appModel.employeeFilterSystem.addFilterItem(filterItem);
+            var fieldItem:TableFieldItem = new TableFieldItem();
+            fieldItem.fieldData = _appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field");
+            fieldItem.fieldValue = _appModel.selectedDepartment.departmentId;
+            _appModel.employeeFilterSystem.filterItemCollection.removeAllItems();
+            _appModel.employeeFilterSystem.filterItemCollection.addItem(fieldItem);
             goToEmployees(FilterContext.DEPARTMENT);
         }
 
@@ -131,16 +128,7 @@ package com.rokannon.project.ProjectLeo
         {
             if (filterContext != null)
                 _appModel.employeeFilterSystem.filterContext = filterContext;
-            var filterItems:Vector.<EmployeeFilterItem> = _appModel.employeeFilterSystem.filterItems;
-            for (var i:int = 0; i < filterItems.length; ++i)
-            {
-                var filterItem:EmployeeFilterItem = filterItems[i];
-                var conditionTemplate = filterItem.fieldData.dataType == "integer" ? "{0}={1}" : "{0}='{1}'";
-                helperStrings.push(stringFormat(conditionTemplate, filterItem.fieldData.fieldName,
-                                                filterItem.filterValue));
-            }
-            var whereClause:String = helperStrings.join(" AND ");
-            helperStrings.length = 0;
+            var whereClause:String = _appModel.employeeFilterSystem.createWhereClause();
             var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
             requestDBCommandData.request = new DBRequest(DBRequestType.EMPLOYEES, whereClause);
@@ -154,7 +142,7 @@ package com.rokannon.project.ProjectLeo
 
         public function startNewSearch():void
         {
-            _appModel.employeeFilterSystem.removeAllFilterItems();
+            _appModel.employeeFilterSystem.filterItemCollection.removeAllItems();
 
             updateDepartments();
 
@@ -175,6 +163,31 @@ package com.rokannon.project.ProjectLeo
             updateDepartmentsCommandData.dbSystem = _appModel.dbSystem;
             updateDepartmentsCommandData.departmentsSystem = _appModel.departmentsSystem;
             _appModel.commandExecutor.pushCommand(new UpdateDepartmentsCommand(updateDepartmentsCommandData));
+        }
+
+        public function startBatchUpdate():void
+        {
+            _appModel.employeeUpdateSystem.updateItemsCollection.removeAllItems();
+
+            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
+            showScreenCommandData.navigator = _appModel.screenNavigator;
+            showScreenCommandData.screenName = StarlingRoot.SCREEN_UPDATE_EMPLOYEES;
+            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+        }
+
+        public function updateEmployees():void
+        {
+            var whereClause:String = _appModel.employeeFilterSystem.createWhereClause();
+            var setClause:String = _appModel.employeeUpdateSystem.createUpdateClause();
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            requestDBCommandData.request = new DBRequest(DBRequestType.UPDATE_EMPLOYEES, setClause, whereClause);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+
+            var showScreenCommandData:ShowScreenCommandData = new ShowScreenCommandData();
+            showScreenCommandData.navigator = _appModel.screenNavigator;
+            showScreenCommandData.screenName = StarlingRoot.SCREEN_MAIN_MENU;
+            _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
         }
     }
 }

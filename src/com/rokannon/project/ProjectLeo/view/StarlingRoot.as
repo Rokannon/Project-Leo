@@ -10,6 +10,8 @@ package com.rokannon.project.ProjectLeo.view
     import com.rokannon.project.ProjectLeo.view.screen.MainMenuScreen;
     import com.rokannon.project.ProjectLeo.view.screen.NewDepartmentScreen;
     import com.rokannon.project.ProjectLeo.view.screen.SearchEmployeesScreen;
+    import com.rokannon.project.ProjectLeo.view.screen.TableFieldCollectionEditScreen;
+    import com.rokannon.project.ProjectLeo.view.screen.UpdateEmployeesScreen;
 
     import feathers.controls.Label;
     import feathers.controls.ScreenNavigator;
@@ -28,6 +30,7 @@ package com.rokannon.project.ProjectLeo.view
         public static const SCREEN_NEW_DEPARTMENT:String = "screenNewDepartment";
         public static const SCREEN_HIRE_EMPLOYEE:String = "screenHireEmployee";
         public static const SCREEN_SEARCH_EMPLOYEES:String = "screenSearchEmployees";
+        public static const SCREEN_UPDATE_EMPLOYEES:String = "screenUpdateEmployees";
 
         private var _navigator:ScreenNavigator;
         private var _workingLabel:Label;
@@ -82,6 +85,7 @@ package com.rokannon.project.ProjectLeo.view
             events[EmployeesScreen.EVENT_HIRE_EMPLOYEE] = SCREEN_HIRE_EMPLOYEE;
             events[EmployeesScreen.EVENT_FIRE_EMPLOYEE] = onEmployeeFire;
             events[EmployeesScreen.EVENT_SELECT_EMPLOYEE] = onEmployeeSelect;
+            events[EmployeesScreen.EVENT_BATCH_UPDATE] = appController.startBatchUpdate;
             _navigator.addScreen(SCREEN_EMPLOYEES, new ScreenNavigatorItem(EmployeesScreen, events, propertiesObject));
 
             events = {};
@@ -97,10 +101,16 @@ package com.rokannon.project.ProjectLeo.view
                                  new ScreenNavigatorItem(HireEmployeeScreen, events, propertiesObject));
 
             events = {};
-            events[SearchEmployeesScreen.EVENT_TO_MAIN_MENU] = SCREEN_MAIN_MENU;
-            events[SearchEmployeesScreen.EVENT_DO_SEARCH] = appController.goToEmployeesFiltered;
+            events[TableFieldCollectionEditScreen.EVENT_CANCEL] = SCREEN_MAIN_MENU;
+            events[TableFieldCollectionEditScreen.EVENT_OK] = appController.goToEmployeesFiltered;
             _navigator.addScreen(SCREEN_SEARCH_EMPLOYEES,
                                  new ScreenNavigatorItem(SearchEmployeesScreen, events, propertiesObject));
+
+            events = {};
+            events[TableFieldCollectionEditScreen.EVENT_CANCEL] = onUpdateEmployeesCancel;
+            events[TableFieldCollectionEditScreen.EVENT_OK] = appController.updateEmployees;
+            _navigator.addScreen(SCREEN_UPDATE_EMPLOYEES,
+                                 new ScreenNavigatorItem(UpdateEmployeesScreen, events, propertiesObject));
 
             addChild(_navigator);
             _navigator.showScreen(SCREEN_MAIN_MENU);
@@ -155,6 +165,11 @@ package com.rokannon.project.ProjectLeo.view
         private function onEmployeeSelect(event:Event):void
         {
             _appController.selectEmployee(int(event.data));
+        }
+
+        private function onUpdateEmployeesCancel(event:Event):void
+        {
+            _appController.goToEmployees();
         }
     }
 }

@@ -1,10 +1,10 @@
-package com.rokannon.project.ProjectLeo.system.employeeFilter
+package com.rokannon.project.ProjectLeo.data.tableFieldItem
 {
     import com.rokannon.project.ProjectLeo.system.dataLibrary.tableField.TableFieldData;
 
-    public class EmployeeFilterItem
+    public class TableFieldItem
     {
         public var fieldData:TableFieldData;
-        public var filterValue:*;
+        public var fieldValue:*;
     }
 }

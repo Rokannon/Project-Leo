@@ -7,6 +7,7 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.system.database.DBSystem;
     import com.rokannon.project.ProjectLeo.system.departments.DepartmentsSystem;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.EmployeeFilterSystem;
+    import com.rokannon.project.ProjectLeo.system.employeeUpdate.EmployeeUpdateSystem;
 
     import feathers.controls.ScreenNavigator;
 
@@ -21,12 +22,14 @@ package com.rokannon.project.ProjectLeo
         public const selectedEmployee:EmployeeData = new EmployeeData();
         public const employeeFilterSystem:EmployeeFilterSystem = new EmployeeFilterSystem();
         public const departmentsSystem:DepartmentsSystem = new DepartmentsSystem();
+        public const employeeUpdateSystem:EmployeeUpdateSystem = new EmployeeUpdateSystem();
         public var starlingInstance:Starling;
         public var screenNavigator:ScreenNavigator;
 
         public function ApplicationModel()
         {
             employeeFilterSystem.connect(appDataSystem);
+            employeeUpdateSystem.connect(appDataSystem);
         }
     }
 }
