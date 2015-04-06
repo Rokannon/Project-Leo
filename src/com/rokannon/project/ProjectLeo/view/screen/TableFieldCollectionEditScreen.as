@@ -37,9 +37,9 @@ package com.rokannon.project.ProjectLeo.view.screen
         protected var _itemsListCollection:ListCollection;
         protected var _cancelButton:Button;
         protected var _removeItemButton:Button;
-        protected var _addItemButton:Button;
         protected var _itemsList:List;
         protected var _okButton:Button;
+        protected var _addItemPickerList:PickerList;
 
         override protected function initialize():void
         {
@@ -81,10 +81,18 @@ package com.rokannon.project.ProjectLeo.view.screen
             _removeItemButton.nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
             footerProperties.leftItems = new <DisplayObject> [_removeItemButton];
 
-            _addItemButton = new Button();
-            _addItemButton.label = "Add Item";
-            _addItemButton.addEventListener(Event.TRIGGERED, addItemButton_triggeredHandler);
-            footerProperties.rightItems = new <DisplayObject> [_addItemButton];
+            _addItemPickerList = new PickerList();
+            _addItemPickerList.prompt = "Add Item";
+            _addItemPickerList.dataProvider = new ListCollection(getFreeFields());
+            _addItemPickerList.selectedIndex = -1;
+            _addItemPickerList.addEventListener(Event.CHANGE, addItemPickerList_changeHandler);
+            _addItemPickerList.listFactory = function ():List
+            {
+                var list:List = new List();
+                list.itemRendererProperties.labelField = "labelName";
+                return list;
+            };
+            footerProperties.rightItems = new <DisplayObject> [_addItemPickerList];
 
             _okButton = new Button();
             _okButton.label = getOkButtonLabel();
@@ -95,6 +103,20 @@ package com.rokannon.project.ProjectLeo.view.screen
             updateButtons();
         }
 
+        private function addItemPickerList_changeHandler(event:Event):void
+        {
+            if (_addItemPickerList.selectedIndex == -1)
+                return;
+            var item:TableFieldItem = new TableFieldItem();
+            item.fieldData = _addItemPickerList.selectedItem as TableFieldData;
+            item.fieldValue = "";
+            addItemToListCollection(item);
+            getTableFieldCollection().addItem(item);
+            updateButtons();
+            _addItemPickerList.dataProvider.data = getFreeFields();
+            _addItemPickerList.selectedIndex = -1;
+        }
+
         private function doSearchButton_triggeredHandler(event:Event):void
         {
             dispatchEventWith(EVENT_OK);
@@ -102,18 +124,6 @@ package com.rokannon.project.ProjectLeo.view.screen
 
         private function itemsList_changeHandler(event:Event):void
         {
-            updateButtons();
-        }
-
-        private function addItemButton_triggeredHandler(event:Event):void
-        {
-            var item:TableFieldItem = new TableFieldItem();
-            getFreeFields(helperFields);
-            item.fieldData = helperFields[0];
-            helperFields.length = 0;
-            item.fieldValue = "";
-            addItemToListCollection(item);
-            getTableFieldCollection().addItem(item);
             updateButtons();
         }
 
@@ -143,6 +153,8 @@ package com.rokannon.project.ProjectLeo.view.screen
             var item:TableFieldItem = getTableFieldCollection().fieldItems[index];
             getTableFieldCollection().removeItem(item);
             _itemsList.selectedIndex = _itemsListCollection.length - 1;
+            _addItemPickerList.dataProvider.data = getFreeFields();
+            _addItemPickerList.selectedIndex = -1;
             updateButtons();
         }
 
@@ -155,8 +167,8 @@ package com.rokannon.project.ProjectLeo.view.screen
         {
             _removeItemButton.isEnabled = _itemsList.selectedIndex >= 0;
             getFreeFields(helperFields);
-            _addItemButton.isEnabled = helperFields.length > 0;
             helperFields.length = 0;
+            _addItemPickerList.isEnabled = _addItemPickerList.dataProvider.length > 0;
             _okButton.isEnabled = getTableFieldCollection().fieldItems.length > 0;
         }
 
