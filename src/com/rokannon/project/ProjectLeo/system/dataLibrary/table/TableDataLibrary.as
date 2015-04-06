@@ -14,6 +14,11 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.table
             super(DataType.TABLE_DATA);
         }
 
+        public function getTableDataByKey(key:Object):TableData
+        {
+            return getDataByKey(key) as TableData;
+        }
+
         override protected function createDataFromJSON(json:Object):Object
         {
             var data:TableData = new TableData();

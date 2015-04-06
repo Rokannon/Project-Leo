@@ -206,7 +206,7 @@ package com.rokannon.project.ProjectLeo
         {
             var openDBCommandData:OpenDBCommandData = new OpenDBCommandData();
             openDBCommandData.dbSystem = _appModel.dbSystem;
-            openDBCommandData.dbFilename = "_staff.db";
+            openDBCommandData.dbFilename = "staff.db";
             openDBCommandData.openMode = SQLMode.CREATE;
             _appModel.commandExecutor.pushCommand(new OpenDBCommand(openDBCommandData));
 
@@ -217,6 +217,14 @@ package com.rokannon.project.ProjectLeo
                 requestDBCommandData.request = createTableDBRequest(tableData);
                 _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
             }
+
+            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData.dbSystem = _appModel.dbSystem;
+            var employeeTableData:TableData = _appModel.appDataSystem.tableDataLibrary.getTableDataByKey("employees_table");
+            var deptIDFieldData:TableFieldData = _appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field");
+            requestDBCommandData.request = createIndexDBRequst("empl_dept_id_index", employeeTableData,
+                                                               deptIDFieldData);
+            _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
         }
 
         public function showAlert(message:String):void
@@ -241,6 +249,12 @@ package com.rokannon.project.ProjectLeo
                                                     helperStrings.join(", "));
             helperStrings.length = 0;
             return dbRequest;
+        }
+
+        private function createIndexDBRequst(indexName:String, tableData:TableData,
+                                             tableFieldData:TableFieldData):DBRequest
+        {
+            return new DBRequest(DBRequestType.CREATE_INDEX, indexName, tableData.tableName, tableFieldData.fieldName);
         }
     }
 }
