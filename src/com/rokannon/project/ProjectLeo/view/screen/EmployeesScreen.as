@@ -6,6 +6,7 @@ package com.rokannon.project.ProjectLeo.view.screen
     import com.rokannon.project.ProjectLeo.system.database.DBSystem;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.enum.FilterContext;
 
+    import feathers.controls.Alert;
     import feathers.controls.Button;
     import feathers.controls.Header;
     import feathers.controls.List;
@@ -121,6 +122,15 @@ package com.rokannon.project.ProjectLeo.view.screen
         }
 
         private function fireEmployeeButton_triggeredHandler(event:Event):void
+        {
+            var buttonList:ListCollection = new ListCollection([{label: "Cancel"}, {
+                label: "OK",
+                triggered: fireEmployeeAlert_triggeredHandler
+            }]);
+            Alert.show("Are you sure?\nThis can not be undone.", "Alert", buttonList);
+        }
+
+        private function fireEmployeeAlert_triggeredHandler(event:Event):void
         {
             dispatchEventWith(EVENT_FIRE_EMPLOYEE);
         }
