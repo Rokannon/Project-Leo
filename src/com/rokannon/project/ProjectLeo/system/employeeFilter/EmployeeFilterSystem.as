@@ -5,6 +5,7 @@ package com.rokannon.project.ProjectLeo.system.employeeFilter
     import com.rokannon.project.ProjectLeo.data.tableFieldItem.TableFieldItem;
     import com.rokannon.project.ProjectLeo.system.dataLibrary.ApplicationDataSystem;
     import com.rokannon.project.ProjectLeo.system.dataLibrary.tableField.TableFieldData;
+    import com.rokannon.project.ProjectLeo.system.departments.DepartmentsSystem;
 
     public class EmployeeFilterSystem
     {
@@ -14,14 +15,16 @@ package com.rokannon.project.ProjectLeo.system.employeeFilter
         public var filterContext:String;
 
         private var _appDataSystem:ApplicationDataSystem;
+        private var _departmentsSystem:DepartmentsSystem;
 
         public function EmployeeFilterSystem()
         {
         }
 
-        public function connect(appDataSystem:ApplicationDataSystem):void
+        public function connect(appDataSystem:ApplicationDataSystem, departmentsSystem:DepartmentsSystem):void
         {
             _appDataSystem = appDataSystem;
+            _departmentsSystem = departmentsSystem;
         }
 
         public function getUnfilteredFields(resultFields:Vector.<TableFieldData> = null):Vector.<TableFieldData>
@@ -30,6 +33,8 @@ package com.rokannon.project.ProjectLeo.system.employeeFilter
                 resultFields = new <TableFieldData>[];
             for each (var fieldData:TableFieldData in _appDataSystem.tableFieldDataLibrary.tableFieldDataArray)
             {
+                if (fieldData == _appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field") && _departmentsSystem.departments.length == 0)
+                    continue;
                 if (filterItemCollection.fieldItemByFieldData[fieldData] == null && fieldData.allowSearch)
                     resultFields.push(fieldData);
             }

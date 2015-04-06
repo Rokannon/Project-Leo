@@ -210,15 +210,17 @@ package com.rokannon.project.ProjectLeo
             openDBCommandData.openMode = SQLMode.CREATE;
             _appModel.commandExecutor.pushCommand(new OpenDBCommand(openDBCommandData));
 
+            var requestDBCommandData:RequestDBCommandData;
+
             for each (var tableData:TableData in _appModel.appDataSystem.tableDataLibrary.tableDataArray)
             {
-                var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+                requestDBCommandData = new RequestDBCommandData();
                 requestDBCommandData.dbSystem = _appModel.dbSystem;
                 requestDBCommandData.request = createTableDBRequest(tableData);
                 _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
             }
 
-            var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+            requestDBCommandData = new RequestDBCommandData();
             requestDBCommandData.dbSystem = _appModel.dbSystem;
             var employeeTableData:TableData = _appModel.appDataSystem.tableDataLibrary.getTableDataByKey("employees_table");
             var deptIDFieldData:TableFieldData = _appModel.appDataSystem.tableFieldDataLibrary.getTableFieldDataByKey("dept_field");

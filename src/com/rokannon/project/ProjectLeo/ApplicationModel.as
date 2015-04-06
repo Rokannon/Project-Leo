@@ -28,7 +28,7 @@ package com.rokannon.project.ProjectLeo
 
         public function ApplicationModel()
         {
-            employeeFilterSystem.connect(appDataSystem);
+            employeeFilterSystem.connect(appDataSystem, departmentsSystem);
             employeeUpdateSystem.connect(appDataSystem);
         }
     }

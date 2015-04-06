@@ -18,6 +18,8 @@ package com.rokannon.project.ProjectLeo.command.updateDepartments
         override protected function doExecute():void
         {
             _data.departmentsSystem.removeAllDepartments();
+            if (_data.dbSystem.requestResult.result.data == null)
+                return;
             var numDepartments:int = _data.dbSystem.requestResult.result.data.length;
             for (var i:int = 0; i < numDepartments; ++i)
             {
