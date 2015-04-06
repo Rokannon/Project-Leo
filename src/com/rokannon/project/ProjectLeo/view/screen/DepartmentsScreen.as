@@ -4,6 +4,7 @@ package com.rokannon.project.ProjectLeo.view.screen
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
     import com.rokannon.project.ProjectLeo.system.database.DBSystem;
 
+    import feathers.controls.Alert;
     import feathers.controls.Button;
     import feathers.controls.Header;
     import feathers.controls.List;
@@ -99,6 +100,16 @@ package com.rokannon.project.ProjectLeo.view.screen
         }
 
         private function deleteDepartmentButton_triggeredHandler(event:Event):void
+        {
+            var buttonList:ListCollection = new ListCollection([{label: "Cancel"}, {
+                label: "OK",
+                triggered: deleteDepartmentAlert_triggeredHandler
+            }]);
+            Alert.show("Are you sure you want to delete the department with all it's employees?\nThis can not be undone.",
+                       "Alert", buttonList);
+        }
+
+        private function deleteDepartmentAlert_triggeredHandler(event:Event):void
         {
             dispatchEventWith(EVENT_DELETE_DEPARTMENT);
         }
