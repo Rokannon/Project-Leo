@@ -8,6 +8,8 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.selectDepartment.SelectDepartmentCommandData;
     import com.rokannon.project.ProjectLeo.command.selectEmployee.SelectEmployeeCommand;
     import com.rokannon.project.ProjectLeo.command.selectEmployee.SelectEmployeeCommandData;
+    import com.rokannon.project.ProjectLeo.command.showAlert.ShowAlertCommand;
+    import com.rokannon.project.ProjectLeo.command.showAlert.ShowAlertCommandData;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommand;
     import com.rokannon.project.ProjectLeo.command.showScreen.ShowScreenCommandData;
     import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommand;
@@ -188,6 +190,11 @@ package com.rokannon.project.ProjectLeo
             showScreenCommandData.navigator = _appModel.screenNavigator;
             showScreenCommandData.screenName = StarlingRoot.SCREEN_MAIN_MENU;
             _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
+
+            var showAlertCommandData:ShowAlertCommandData = new ShowAlertCommandData();
+            showAlertCommandData.alertTitle = "Alert";
+            showAlertCommandData.alertMessage = "Batch update complete.";
+            _appModel.commandExecutor.pushCommand(new ShowAlertCommand(showAlertCommandData));
         }
     }
 }
