@@ -11,6 +11,7 @@ package com.rokannon.project.ProjectLeo.command.requestDB
         public static const FIRE_EMPLOYEE:DBRequestType = new DBRequestType("DELETE FROM Employees WHERE EmplID = '{0}';");
         public static const GET_DEPARTMENTS:DBRequestType = new DBRequestType("SELECT DeptName, DeptID FROM Departments;");
         public static const UPDATE_EMPLOYEES:DBRequestType = new DBRequestType("UPDATE Employees SET {0} WHERE {1}");
+        public static const CREATE_TABLE:DBRequestType = new DBRequestType("CREATE TABLE {0}({1});");
 
         private var _requestTemplate:String;
 

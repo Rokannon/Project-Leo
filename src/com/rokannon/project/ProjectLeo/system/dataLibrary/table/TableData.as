@@ -6,5 +6,6 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.table
     {
         public const tableFields:Vector.<TableFieldData> = new <TableFieldData>[];
         public var primaryKeyName:String;
+        public var tableName:String;
     }
 }

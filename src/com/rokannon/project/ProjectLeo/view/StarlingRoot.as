@@ -4,6 +4,7 @@ package com.rokannon.project.ProjectLeo.view
     import com.rokannon.project.ProjectLeo.ApplicationModel;
     import com.rokannon.project.ProjectLeo.command.core.CommandExecutor;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
+    import com.rokannon.project.ProjectLeo.system.database.DBSystem;
     import com.rokannon.project.ProjectLeo.view.screen.DepartmentsScreen;
     import com.rokannon.project.ProjectLeo.view.screen.EmployeesScreen;
     import com.rokannon.project.ProjectLeo.view.screen.HireEmployeeScreen;
@@ -114,6 +115,14 @@ package com.rokannon.project.ProjectLeo.view
 
             addChild(_navigator);
             _navigator.showScreen(SCREEN_MAIN_MENU);
+
+            _appModel.dbSystem.eventDatabaseOpenError.add(onDatabaseOpenError);
+        }
+
+        private function onDatabaseOpenError(dbSystem:DBSystem):void
+        {
+            _appController.createEmptyDatabase();
+            _appController.showAlert("Application was unable to find and open database file.\nEmpty database was created.");
         }
 
         private function onExecuteStart(executor:CommandExecutor):void

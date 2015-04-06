@@ -1,5 +1,7 @@
 package com.rokannon.project.ProjectLeo
 {
+    import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommand;
+    import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommandData;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequest;
     import com.rokannon.project.ProjectLeo.command.requestDB.DBRequestType;
     import com.rokannon.project.ProjectLeo.command.requestDB.RequestDBCommand;
@@ -16,11 +18,17 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.updateDepartments.UpdateDepartmentsCommandData;
     import com.rokannon.project.ProjectLeo.data.EmployeeData;
     import com.rokannon.project.ProjectLeo.data.tableFieldItem.TableFieldItem;
+    import com.rokannon.project.ProjectLeo.system.dataLibrary.table.TableData;
+    import com.rokannon.project.ProjectLeo.system.dataLibrary.tableField.TableFieldData;
     import com.rokannon.project.ProjectLeo.system.employeeFilter.enum.FilterContext;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
+    import flash.data.SQLMode;
+
     public class ApplicationController
     {
+        private static const helperStrings:Vector.<String> = new <String>[];
+
         private var _appModel:ApplicationModel;
 
         public function ApplicationController()
@@ -191,10 +199,48 @@ package com.rokannon.project.ProjectLeo
             showScreenCommandData.screenName = StarlingRoot.SCREEN_MAIN_MENU;
             _appModel.commandExecutor.pushCommand(new ShowScreenCommand(showScreenCommandData));
 
+            showAlert("Batch update complete.");
+        }
+
+        public function createEmptyDatabase():void
+        {
+            var openDBCommandData:OpenDBCommandData = new OpenDBCommandData();
+            openDBCommandData.dbSystem = _appModel.dbSystem;
+            openDBCommandData.dbFilename = "_staff.db";
+            openDBCommandData.openMode = SQLMode.CREATE;
+            _appModel.commandExecutor.pushCommand(new OpenDBCommand(openDBCommandData));
+
+            for each (var tableData:TableData in _appModel.appDataSystem.tableDataLibrary.tableDataArray)
+            {
+                var requestDBCommandData:RequestDBCommandData = new RequestDBCommandData();
+                requestDBCommandData.dbSystem = _appModel.dbSystem;
+                requestDBCommandData.request = createTableDBRequest(tableData);
+                _appModel.commandExecutor.pushCommand(new RequestDBCommand(requestDBCommandData));
+            }
+        }
+
+        public function showAlert(message:String):void
+        {
             var showAlertCommandData:ShowAlertCommandData = new ShowAlertCommandData();
             showAlertCommandData.alertTitle = "Alert";
-            showAlertCommandData.alertMessage = "Batch update complete.";
+            showAlertCommandData.alertMessage = message;
             _appModel.commandExecutor.pushCommand(new ShowAlertCommand(showAlertCommandData));
+        }
+
+        private function createTableDBRequest(tableData:TableData):DBRequest
+        {
+            for (var i:int = 0; i < tableData.tableFields.length; ++i)
+            {
+                var tableField:TableFieldData = tableData.tableFields[i];
+                var tableFieldString:String = tableField.fieldName + " " + tableField.dataType;
+                if (tableField.fieldName == tableData.primaryKeyName)
+                    tableFieldString += " PRIMARY KEY";
+                helperStrings.push(tableFieldString);
+            }
+            var dbRequest:DBRequest = new DBRequest(DBRequestType.CREATE_TABLE, tableData.tableName,
+                                                    helperStrings.join(", "));
+            helperStrings.length = 0;
+            return dbRequest;
         }
     }
 }

@@ -1,4 +1,21 @@
 {
+  "departments_table": {
+    "primaryKeyName": "DeptID",
+    "tableFields": [
+      {
+        "dataType": "integer",
+        "enableAutoincrement": true,
+        "fieldName": "DeptID",
+        "labelName": "Department"
+      },
+      {
+        "dataType": "text",
+        "fieldName": "DeptName",
+        "labelName": "Department Name"
+      }
+    ],
+    "tableName": "Departments"
+  },
   "employees_table": {
     "primaryKeyName": "EmplID",
     "tableFields": [
@@ -7,7 +24,7 @@
         "dataType": "integer",
         "enableAutoincrement": true,
         "fieldName": "EmplID",
-        "labelName": "Employee ID"
+        "labelName": "Employee"
       },
       "dept_field",
       {
@@ -28,6 +45,7 @@
         "fieldName": "Position",
         "labelName": "Position"
       }
-    ]
+    ],
+    "tableName": "Employees"
   }
 }

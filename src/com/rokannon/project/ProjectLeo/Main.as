@@ -1,5 +1,6 @@
 package com.rokannon.project.ProjectLeo
 {
+    import com.rokannon.core.utils.callOutStack;
     import com.rokannon.project.ProjectLeo.command.initDataSystem.InitDataSystemCommand;
     import com.rokannon.project.ProjectLeo.command.initDataSystem.InitDataSystemCommandData;
     import com.rokannon.project.ProjectLeo.command.openDB.OpenDBCommand;
@@ -8,6 +9,7 @@ package com.rokannon.project.ProjectLeo
     import com.rokannon.project.ProjectLeo.command.startStarling.StartStarlingCommandData;
     import com.rokannon.project.ProjectLeo.view.StarlingRoot;
 
+    import flash.data.SQLMode;
     import flash.display.Sprite;
     import flash.display.StageScaleMode;
 
@@ -35,11 +37,11 @@ package com.rokannon.project.ProjectLeo
 
             stage.scaleMode = StageScaleMode.NO_SCALE;
 
-            var openDBCommandData:OpenDBCommandData = new OpenDBCommandData();
-            openDBCommandData.dbSystem = appModel.dbSystem;
-            openDBCommandData.dbFilename = "staff.db";
-            appModel.commandExecutor.pushCommand(new OpenDBCommand(openDBCommandData));
+            callOutStack(startApplication);
+        }
 
+        private function startApplication():void
+        {
             var startStarlingCommandData:StartStarlingCommandData = new StartStarlingCommandData();
             startStarlingCommandData.appModel = appModel;
             startStarlingCommandData.appController = appController;
@@ -50,6 +52,12 @@ package com.rokannon.project.ProjectLeo
             var initDataSystemCommandData:InitDataSystemCommandData = new InitDataSystemCommandData();
             initDataSystemCommandData.appDataSystem = appModel.appDataSystem;
             appModel.commandExecutor.pushCommand(new InitDataSystemCommand(initDataSystemCommandData));
+
+            var openDBCommandData:OpenDBCommandData = new OpenDBCommandData();
+            openDBCommandData.dbSystem = appModel.dbSystem;
+            openDBCommandData.dbFilename = "staff.db";
+            openDBCommandData.openMode = SQLMode.READ;
+            appModel.commandExecutor.pushCommand(new OpenDBCommand(openDBCommandData));
         }
     }
 }

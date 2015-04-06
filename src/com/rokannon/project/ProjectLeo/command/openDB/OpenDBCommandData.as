@@ -6,5 +6,6 @@ package com.rokannon.project.ProjectLeo.command.openDB
     {
         public var dbFilename:String;
         public var dbSystem:DBSystem;
+        public var openMode:String;
     }
 }

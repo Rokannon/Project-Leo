@@ -7,6 +7,8 @@ package com.rokannon.project.ProjectLeo.system.database
     public class DBSystem
     {
         public const eventRequestComplete:Broadcaster = new Broadcaster(this);
+        public const eventDatabaseOpenComplete:Broadcaster = new Broadcaster(this);
+        public const eventDatabaseOpenError:Broadcaster = new Broadcaster(this);
         public const connection:SQLConnection = new SQLConnection();
         public const requestResult:DBRequestResult = new DBRequestResult();
 

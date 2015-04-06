@@ -22,7 +22,7 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.tableField
         override protected function createDataFromJSON(json:Object):Object
         {
             var data:TableFieldData = new TableFieldData();
-            data.allowSearch = requireProperty(json, "allowSearch");
+            data.allowSearch = getProperty(json, "allowSearch", false);
             data.dataType = requireProperty(json, "dataType");
             data.enableAutoincrement = getProperty(json, "enableAutoincrement", false);
             data.fieldName = requireProperty(json, "fieldName");

@@ -102,8 +102,7 @@ package com.rokannon.project.ProjectLeo.view.screen
         private function deleteDepartmentButton_triggeredHandler(event:Event):void
         {
             var buttonList:ListCollection = new ListCollection([{label: "Cancel"}, {
-                label: "OK",
-                triggered: deleteDepartmentAlert_triggeredHandler
+                label: "OK", triggered: deleteDepartmentAlert_triggeredHandler
             }]);
             Alert.show("Are you sure you want to delete the department with all it's employees?\nThis can not be undone.",
                        "Alert", buttonList);

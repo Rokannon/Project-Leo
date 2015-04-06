@@ -7,6 +7,8 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.table
 
     public class TableDataLibrary extends ApplicationDataLibrary
     {
+        public const tableDataArray:Vector.<TableData> = new <TableData>[];
+
         public function TableDataLibrary()
         {
             super(DataType.TABLE_DATA);
@@ -16,12 +18,14 @@ package com.rokannon.project.ProjectLeo.system.dataLibrary.table
         {
             var data:TableData = new TableData();
             data.primaryKeyName = requireProperty(json, "primaryKeyName");
+            data.tableName = requireProperty(json, "tableName");
             var tableFields:Array = requireProperty(json, "tableFields");
             for (var i:int = 0; i < tableFields.length; ++i)
             {
                 var tableFieldData:TableFieldData = _dataSystem.tableFieldDataLibrary.getTableFieldDataByKey(tableFields[i]);
                 data.tableFields[i] = tableFieldData;
             }
+            tableDataArray.push(data);
             return data;
         }
     }
